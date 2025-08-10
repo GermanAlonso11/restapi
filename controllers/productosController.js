@@ -1,6 +1,7 @@
 const Producto = require('../models/Productos');
 const multer = require('multer');
 const shortid = require('shortid');
+const fs = require('fs');
 
 //Configuración de multer para subir archivos
 const configuracionMulter = {
@@ -91,11 +92,41 @@ exports.actualizarProducto = async (req, res) => {
     try {
         if (req.file) {
             producto.imagen = req.file.filename;
-        }
+            
+        }else {
+        producto.imagen = producto.imagen; // Mantener la imagen existente
+    }
         await producto.save();
         res.json({ mensaje: 'Producto actualizado correctamente' });
     } catch (error) {
         console.log(error);
         res.status(500).send('Error al actualizar el producto');
+    }
+
+}
+
+//Eliminar un producto por id
+exports.eliminarProducto = async (req, res) => {
+    try {
+        //Eliminar el producto
+        let producto = await Producto.findById(req.params.id);
+        if (!producto) {
+            res.status(404).json({ mensaje: 'Producto no encontrado' });
+            return;
+        }
+        await Producto.findOneAndDelete({ _id: req.params.id });
+        //Eliminar la imagen del servidor
+        const imagenPath = __dirname + '../../uploads/' + producto.imagen;
+        fs.unlink(imagenPath, (error) => {
+            if (error) {
+                console.log(error);
+                res.status(500).send('Error al eliminar la imagen');
+            } else {
+                res.json({ mensaje: 'Producto eliminado correctamente' });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error al eliminar el producto');
     }
 }

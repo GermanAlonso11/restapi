@@ -30,6 +30,15 @@ module.exports = function () {
 
     //Mostrar un producto en específico
     router.get('/productos/:id', productosController.mostrarProducto);
+
+    //Actualizar un producto
+    router.put('/productos/:id',
+        productosController.subirArchivo,
+        productosController.actualizarProducto);
+
+
+    //Eliminar un producto
+    router.delete('/productos/:id', productosController.eliminarProducto);
     
     return router;
 }
