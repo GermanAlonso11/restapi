@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const clienteController = require('../controllers/clienteController');
 const productosController = require('../controllers/productosController');
+const pedidosController = require('../controllers/pedidosController');
 
 module.exports = function () {
     //Agregar nuevos clientes via post
@@ -36,9 +37,12 @@ module.exports = function () {
         productosController.subirArchivo,
         productosController.actualizarProducto);
 
-
     //Eliminar un producto
     router.delete('/productos/:id', productosController.eliminarProducto);
+
+    /* PEDIDOS */
+    //Agregar nuevos pedidos
+    router.post('/pedidos', pedidosController.nuevoPedido);
     
     return router;
 }

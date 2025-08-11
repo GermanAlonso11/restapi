@@ -75,3 +75,4 @@ exports.eliminarCliente = async (req, res, next) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 }
+
