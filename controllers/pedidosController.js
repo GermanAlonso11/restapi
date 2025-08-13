@@ -1,9 +1,10 @@
-const pedidosController = require('../controllers/pedidosController');
+const Pedidos = require('../models/Pedidos');
 
-module.nuevoPedido = async (req, res, next) => {
+exports.nuevoPedido = async (req, res, next) => {
   try {
     const pedido = new Pedidos(req.body);
     await pedido.save();
+    // res.json({ mensaje: 'Pedido agregado correctamente' });
     res.status(201).json({ mensaje: 'Pedido creado', pedido });
   } catch (error) {
     console.error("Error al crear pedido:", error.message);
@@ -16,3 +17,16 @@ module.nuevoPedido = async (req, res, next) => {
     }
     }
     }
+
+    //Muestra todos los pedidos
+exports.mostrarPedidos = async (req, res, next) => {
+  try {
+    const pedidos = await Pedidos.find().populate('cliente').populate({path: 'pedido.producto',
+      model: 'Productos'
+    });
+    res.json(pedidos);
+  } catch (error) {
+    console.error("Error al obtener pedidos:", error.message);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+}
