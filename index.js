@@ -3,6 +3,9 @@ const routes = require('./routes/index');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+//Importar cors
+const cors = require('cors');
+
 //Crear servidor
 const app = express();
 
@@ -18,6 +21,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/restapis', {
 //Habilitar body parser /Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//Habilitar cors
+app.use(cors());
 
 
 //Rutas de la app
